@@ -1,0 +1,27 @@
+﻿using System.Text.Json;
+using FacadeAndProxyDesignPattern.Common.Documents;
+using FacadeAndProxyDesignPattern.Common.Interfaces.Repositories;
+
+namespace FacadeAndProxyDesignPattern.Implementation.Repositories;
+
+public class AdminDatabaseRepository: IAdminDatabaseRepository
+{
+    private readonly ILogger _logger;
+
+    public AdminDatabaseRepository(ILogger logger)
+    {
+        _logger = logger;
+    }
+    
+    public AdminDocument GetUserFromDatabase(string user)
+    {
+        List<AdminDocument>? source;
+        using (StreamReader r = new StreamReader("../../data.json"))
+        {
+            var json = r.ReadToEnd();
+            source = JsonSerializer.Deserialize<List<AdminDocument>>(json);
+        }
+
+        return source.FirstOrDefault(doc => doc.UserName.Equals(user)) ?? null;
+    }
+}
