@@ -1,6 +1,8 @@
-﻿using FacadeAndProxyDesignPattern.Common.Interfaces.Proxies;
+﻿using FacadeAndProxyDesignPattern.Common.Interfaces.Gateways;
+using FacadeAndProxyDesignPattern.Common.Interfaces.Proxies;
 using FacadeAndProxyDesignPattern.Common.Interfaces.Repositories;
 using FacadeAndProxyDesignPattern.Common.Interfaces.Services;
+using FacadeAndProxyDesignPattern.Implementation.Gateways;
 using FacadeAndProxyDesignPattern.Implementation.Proxies;
 using FacadeAndProxyDesignPattern.Implementation.Repositories;
 using FacadeAndProxyDesignPattern.Implementation.Services;
@@ -22,14 +24,17 @@ public static class ContainerRegistrations
         services.AddMemoryCache();
         
         #region Gateways
-        
+        services.AddSingleton<IUserApiGateway>(provider => new UserApiGateway(
+            provider.GetService<HttpClient>()!,
+            provider.GetService<ILogger>()!));
         #endregion
         
         #region Proxies
 
         services.AddSingleton <IUserApiProxy>(provider => new UserApiProxy(
             provider.GetService<ILogger>()!,
-            provider.GetService<IAdminDatabaseRepository>()!));
+            provider.GetService<IAdminDatabaseRepository>()!,
+            provider.GetService<IUserApiGateway>()!));
         #endregion
         
         #region Repositories
