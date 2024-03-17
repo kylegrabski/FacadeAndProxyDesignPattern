@@ -13,15 +13,23 @@ public class AdminDatabaseRepository: IAdminDatabaseRepository
         _logger = logger;
     }
     
-    public AdminDocument GetUserFromDatabase(string user)
+    public AdminDocument? GetRequesterFromDatabase(string user)
     {
-        List<AdminDocument>? source;
-        using (StreamReader r = new StreamReader("../../data.json"))
+        try
         {
-            var json = r.ReadToEnd();
-            source = JsonSerializer.Deserialize<List<AdminDocument>>(json);
-        }
+            List<AdminDocument>? source;
+            using (StreamReader r = new StreamReader("./data.json"))
+            {
+                var json = r.ReadToEnd();
+                source = JsonSerializer.Deserialize<List<AdminDocument>>(json);
+            }
 
-        return source.FirstOrDefault(doc => doc.UserName.Equals(user)) ?? null;
+            return source?.FirstOrDefault(doc => doc.UserName.Equals(user)) ?? null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"{nameof(AdminDatabaseRepository)}.{nameof(AdminDocument)}: Failed while retrieving admin user data");
+            return null;
+        }
     }
 }
