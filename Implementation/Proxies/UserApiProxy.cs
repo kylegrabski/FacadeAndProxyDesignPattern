@@ -25,24 +25,11 @@ public class UserApiProxy : IUserApiProxy
         var adminDocument = _adminDatabaseRepository.GetRequesterFromDatabase(requester);
 
         var userData = await _userApiGateway.GetUserPlaceholderData(userId);
-        IEnumerable<UserPostsResponseDto>? userPosts = null;
-        // IEnumerable<UserPostsResponseDto> userPosts = new List<UserPostsResponseDto>();
 
-        // @TODO THIS SHOULD ACTUALLY BE IN THE SERVICE!
-        // userEntities = userData.Select(user =>
-        // {
-        //     var userDataEntity = new UserDataEntity()
-        //     {
-        //         UserData = user
-        //     };
-        //     return userDataEntity;
-        // }).ToList();
-        
-        if (adminDocument.IsAdmin)
-        {
-            userPosts = await _userApiGateway.GetUserPlaceholderPosts(userId);
-        }
-        // Check if isAdmin, if so then get user data and user posts, if not then just user data
+        if (!adminDocument.IsAdmin) return (userData, null);
+
+        var userPosts = await _userApiGateway.GetUserPlaceholderPosts(userId);
+
         return (userData, userPosts);
     }
 }
