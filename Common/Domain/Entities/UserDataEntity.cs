@@ -6,5 +6,5 @@ public class UserDataEntity
 {
     public UserDataResponseDto? UserData { get; set; }
     
-    public UserPostsResponseDto? UserPosts { get; set; }
+    public IEnumerable<UserPostsResponseDto>? UserPosts { get; set; }
 }

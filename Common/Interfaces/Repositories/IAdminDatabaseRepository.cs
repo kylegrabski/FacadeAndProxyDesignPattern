@@ -4,5 +4,5 @@ namespace FacadeAndProxyDesignPattern.Common.Interfaces.Repositories;
 
 public interface IAdminDatabaseRepository
 {
-    public AdminDocument? GetRequesterFromDatabase(string user);
+    public AdminDocument GetRequesterFromDatabase(string user);
 }

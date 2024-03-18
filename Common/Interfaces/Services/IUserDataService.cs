@@ -4,5 +4,5 @@ namespace FacadeAndProxyDesignPattern.Common.Interfaces.Services;
 
 public interface IUserDataService
 {
-    Task<IEnumerable<UserDataEntity>?> GetUserData(string requesterUserName, string userId);
+    Task<UserDataEntity?> GetUserData(string requesterUserName, string userId);
 }

@@ -13,7 +13,7 @@ public class AdminDatabaseRepository: IAdminDatabaseRepository
         _logger = logger;
     }
     
-    public AdminDocument? GetRequesterFromDatabase(string user)
+    public AdminDocument GetRequesterFromDatabase(string user)
     {
         try
         {
@@ -24,12 +24,18 @@ public class AdminDatabaseRepository: IAdminDatabaseRepository
                 source = JsonSerializer.Deserialize<List<AdminDocument>>(json);
             }
 
-            return source?.FirstOrDefault(doc => doc.UserName.Equals(user)) ?? null;
+            return source?.FirstOrDefault(doc => doc.UserName.Equals(user)) ?? new AdminDocument()
+            {
+                IsAdmin = false
+            };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, $"{nameof(AdminDatabaseRepository)}.{nameof(AdminDocument)}: Failed while retrieving admin user data");
-            return null;
+            return new AdminDocument()
+            {
+                IsAdmin = false
+            };
         }
     }
 }
