@@ -20,8 +20,8 @@ There are multiple types of proxies:
 - - Contains logic to determine authorization of specific logic. 
 
 ## WHAT THIS PROJECT WILL DO
-- -  [ ] This will hit an external api ([such as JSON Placeholder](https://jsonplaceholder.typicode.com/)) to get a list of users.  
-- - [ ] We will use a proxy in between the request to the JSON API and our response to the requester. 
-- - - [ ] It will check if the requester is an admin, if so it will give more data about the list of users such as the users posts.    
-- - [ ] We will use a Facade Service to construct the payload call to the proxy (which calls the gateway) and also call our repository that will look up our database (which just for this project will be a JSON file since this project isn't about database connections) of users to check if the requester is an admin.  
+- -  [x] This will hit an external api ([such as JSON Placeholder](https://jsonplaceholder.typicode.com/)) to get a list of users.  
+- - [x] We will use a proxy in between the request to the JSON API and our response to the requester. 
+- - - [x] It will check if the requester is an admin, if so it will give more data about the list of users such as the users posts.    
+- - [x] We will use a Facade Service to construct the payload call to the proxy (which calls the gateway) and also call our repository that will look up our database (which just for this project will be a JSON file since this project isn't about database connections) of users to check if the requester is an admin.  
 - - [ ] Unit tests to make sure the Facade and Proxy patterns are being used correctly. This project will create multiple object types to help with this.
