@@ -17,14 +17,22 @@ public class UserDataController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Route("userData/{requester}/{userId}")]
     public async Task<IActionResult> GetUserData([FromRoute] string requester, string userId)
     {
         try
         {
-            var getUserData = await _userDataService.GetUserData(requester, userId);
-            return StatusCode(StatusCodes.Status200OK, "YOU DID IT");
+            var userData = await _userDataService.GetUserData(requester, userId);
+
+            if (userData == null)
+            {
+                _logger.LogError($"{nameof(UserDataController)}.{nameof(GetUserData)}: Failed while retrieving user data. UserId: {userId} - Requester: {requester}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred while processing the request.");
+            }
+            
+            return StatusCode(StatusCodes.Status200OK, userData);
         }
         catch (Exception ex)
         {
