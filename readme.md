@@ -1,6 +1,6 @@
 # Facade and Proxy Design Pattern Implementation
 
-This is ment to gain a better understand of design patterns, specifically the Facade and Proxy patterns.
+This is ment to gain a better understanding of design patterns, specifically the Facade and Proxy patterns.
 
 ### FACADE
 The Facade design pattern is meant to provide a simple interface for complex subsystems.  
