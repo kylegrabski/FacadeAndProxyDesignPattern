@@ -1,22 +1,26 @@
-﻿using FacadeAndProxyDesignPattern.Common.Dto.Responses;
+﻿using AutoMapper;
+using FacadeAndProxyDesignPattern.Common.Documents;
+using FacadeAndProxyDesignPattern.Common.Dto.Responses;
 using FacadeAndProxyDesignPattern.Common.Interfaces.Gateways;
 using Newtonsoft.Json;
 
 namespace FacadeAndProxyDesignPattern.Implementation.Gateways;
 
-public class UserApiGateway: IUserApiGateway
+public class UserApiGateway : IUserApiGateway
 {
     private readonly string _baseUrl;
     private readonly HttpClient _client;
+    private readonly IMapper _mapper;
     private readonly ILogger _logger;
 
-    public UserApiGateway(HttpClient client, ILogger logger)
+    public UserApiGateway(HttpClient client, IMapper mapper, ILogger logger)
     {
         _client = client;
         _baseUrl = "https://jsonplaceholder.typicode.com";
+        _mapper = mapper;
         _logger = logger;
     }
-    public async Task<UserDataResponseDto?> GetUserPlaceholderData(string userId)
+    public async Task<UserDocument?> GetUserPlaceholderData(string userId)
     {
         try
         {
@@ -32,7 +36,7 @@ public class UserApiGateway: IUserApiGateway
 
             var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var results = JsonConvert.DeserializeObject<UserDataResponseDto>(responseString);
-            return results;
+            return _mapper.Map<UserDocument>(results);
         }
         catch (Exception ex)
         {
@@ -41,7 +45,7 @@ public class UserApiGateway: IUserApiGateway
         }
     }
 
-    public async Task<IEnumerable<UserPostsResponseDto>> GetUserPlaceholderPosts(string userId)
+    public async Task<IEnumerable<UserPostDocument>> GetUserPlaceholderPosts(string userId)
     {
         try
         {
@@ -57,7 +61,7 @@ public class UserApiGateway: IUserApiGateway
 
             var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var results = JsonConvert.DeserializeObject<IEnumerable<UserPostsResponseDto>>(responseString);
-            return results;
+            return _mapper.Map<IEnumerable<UserPostDocument>>(results);
         }
         catch (Exception ex)
         {

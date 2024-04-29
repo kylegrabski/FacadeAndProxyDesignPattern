@@ -1,4 +1,6 @@
-﻿using FacadeAndProxyDesignPattern.Common.Interfaces.Gateways;
+﻿using AutoMapper;
+using FacadeAndProxyDesignPattern.Common.Extensions;
+using FacadeAndProxyDesignPattern.Common.Interfaces.Gateways;
 using FacadeAndProxyDesignPattern.Common.Interfaces.Proxies;
 using FacadeAndProxyDesignPattern.Common.Interfaces.Repositories;
 using FacadeAndProxyDesignPattern.Common.Interfaces.Services;
@@ -26,6 +28,7 @@ public static class ContainerRegistrations
         #region Gateways
         services.AddSingleton<IUserApiGateway>(provider => new UserApiGateway(
             provider.GetService<HttpClient>()!,
+            provider.GetService<IMapper>()!,
             provider.GetService<ILogger>()!));
         #endregion
         
@@ -34,6 +37,7 @@ public static class ContainerRegistrations
         services.AddSingleton <IUserApiProxy>(provider => new UserApiProxy(
             provider.GetService<ILogger>()!,
             provider.GetService<IAdminDatabaseRepository>()!,
+            provider.GetService<IMapper>()!,
             provider.GetService<IUserApiGateway>()!));
         #endregion
         
@@ -48,8 +52,13 @@ public static class ContainerRegistrations
 
         services.AddSingleton<IUserDataService>(provider => new UserDataService(
             provider.GetService<ILogger>()!,
+            provider.GetService<IMapper>()!,
             provider.GetService<IUserApiProxy>()!));
 
         #endregion
+
+        var mapperConfig = new MapperConfiguration(cfg => cfg.AddMappers());
+        var mapper = mapperConfig.CreateMapper();
+        services.AddSingleton(mapper);
     }
 }

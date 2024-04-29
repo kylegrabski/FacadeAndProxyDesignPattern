@@ -26,13 +26,10 @@ public class UserDataController : ControllerBase
         {
             var userData = await _userDataService.GetUserData(requester, userId);
 
-            if (userData == null)
-            {
-                _logger.LogError($"{nameof(UserDataController)}.{nameof(GetUserData)}: Failed while retrieving user data. UserId: {userId} - Requester: {requester}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred while processing the request.");
-            }
-            
-            return StatusCode(StatusCodes.Status200OK, userData);
+            if (userData != null) return StatusCode(StatusCodes.Status200OK, userData);
+            _logger.LogError($"{nameof(UserDataController)}.{nameof(GetUserData)}: Failed while retrieving user data. UserId: {userId} - Requester: {requester}");
+            return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred while processing the request.");
+
         }
         catch (Exception ex)
         {

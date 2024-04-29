@@ -1,4 +1,5 @@
-﻿using FacadeAndProxyDesignPattern.Common.Domain.Entities;
+﻿using AutoMapper;
+using FacadeAndProxyDesignPattern.Common.Domain.Entities;
 using FacadeAndProxyDesignPattern.Common.Interfaces.Proxies;
 using FacadeAndProxyDesignPattern.Common.Interfaces.Services;
 
@@ -7,11 +8,13 @@ namespace FacadeAndProxyDesignPattern.Implementation.Services;
 public class UserDataService : IUserDataService
 {
     private readonly ILogger _logger;
+    private readonly IMapper _mapper;
     private readonly IUserApiProxy _userApiProxy;
 
-    public UserDataService(ILogger logger, IUserApiProxy userApiProxy)
+    public UserDataService(ILogger logger, IMapper mapper, IUserApiProxy userApiProxy)
     {
         _logger = logger;
+        _mapper = mapper;
         _userApiProxy = userApiProxy;
     }
     
@@ -19,18 +22,9 @@ public class UserDataService : IUserDataService
     {
         try
         {
-            var (userData, userPosts) = await _userApiProxy.RequestUserData(requesterUserName, userId); // @TODO CHECK FOR NULL
-            var userEntity = new UserDataEntity()
-            {
-                UserData = userData
-            };
-            
-            if (userPosts != null)
-            {
-                userEntity.UserPosts = userPosts;
-            }
+            var userDataEntity = await _userApiProxy.RequestUserData(requesterUserName, userId);
 
-            return userEntity;
+            return userDataEntity;
         }
         catch (Exception ex)
         {

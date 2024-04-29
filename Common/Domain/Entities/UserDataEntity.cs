@@ -4,7 +4,13 @@ namespace FacadeAndProxyDesignPattern.Common.Domain.Entities;
 
 public class UserDataEntity
 {
-    public UserDataResponseDto? UserData { get; set; }
-    
-    public IEnumerable<UserPostsResponseDto>? UserPosts { get; set; }
+    public string Id { get; set; }
+    public string UserName { get; set; }
+    public IEnumerable<Posts>? Posts {get; set; }
+}
+
+public class Posts
+{
+    public string Title { get; set; }
+    public string Body { get; set; }
 }
